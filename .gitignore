@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Client/obj/Debug
+/Client/bin/Debug
+/Repository/bin/Debug
+/Repository/obj/Debug
+/SharedLib/bin/Debug
+/SharedLib/obj/Debug
+/StreamingService/bin/Debug
+/StreamingService/obj/Debug
+/Web/obj/Debug
+/Web/bin
