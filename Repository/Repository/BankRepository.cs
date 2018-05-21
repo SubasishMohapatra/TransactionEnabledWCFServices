@@ -20,7 +20,7 @@ namespace Repository
         {
             using (BankContext context = new BankContext())
             {
-                return await context.Accounts.ToListAsync();
+                return await context.Account.ToListAsync();
             }
         }
 
@@ -28,7 +28,7 @@ namespace Repository
         {
             using (BankContext context = new BankContext())
             {
-                var account = await context.Accounts.FirstOrDefaultAsync(x => x.AccountID == accountID);
+                var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
                 return account?.Balance ?? 0;
             }
         }
@@ -39,7 +39,7 @@ namespace Repository
             {
                 using (BankContext context = new BankContext())
                 {
-                    var account = await context.Accounts.FirstOrDefaultAsync(x => x.AccountID == accountID);
+                    var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
                     account.Balance += amount;
                     context.Entry(account).State = EntityState.Modified;
                     await context.SaveChangesAsync();
@@ -58,7 +58,7 @@ namespace Repository
             {
                 using (BankContext context = new BankContext())
                 {
-                    var account = await context.Accounts.FirstOrDefaultAsync(x => x.AccountID == accountID);
+                    var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
                     account.Balance -= amount;
                     context.Entry(account).State = EntityState.Modified;
                     await context.SaveChangesAsync();

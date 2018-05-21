@@ -35,7 +35,15 @@ namespace Repository
         /// <value>
         /// The users.
         /// </value>
-        public DbSet<Account> Accounts { get; set; }    
-  
+        public DbSet<Account> Account { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Account>().ToTable("Account");
+            modelBuilder.Entity<Account>().Property(p=>p.AccountID).HasColumnName("AccountID");
+            modelBuilder.Entity<Account>().Property(p => p.CustomerName).HasColumnName("CustomerName");
+            modelBuilder.Entity<Account>().Property(p => p.Balance).HasColumnName("Balance");
+        }
+
     }
 }

@@ -13,7 +13,7 @@ namespace BankingService
 {
     [ServiceBehavior(
   TransactionIsolationLevel =
-    System.Transactions.IsolationLevel.Serializable,
+    System.Transactions.IsolationLevel.ReadUncommitted,
   TransactionTimeout = "00:10:30",
   InstanceContextMode = InstanceContextMode.PerSession,
   TransactionAutoCompleteOnSessionClose = true)]

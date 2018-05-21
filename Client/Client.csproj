@@ -55,10 +55,6 @@
       <Project>{31C91D37-EC59-4CB2-B49E-B6CEDE86506D}</Project>
       <Name>SharedLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\StreamingService\BankingService.csproj">
-      <Project>{9E6B00A6-8FD1-4C90-9C65-94792FFDE3EB}</Project>
-      <Name>BankingService</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
