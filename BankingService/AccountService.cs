@@ -8,15 +8,17 @@ using System.Text;
 using System.ServiceModel;
 using Repository;
 using System.Threading.Tasks;
-
+//TransactionIsolationLevel =
+//    System.Transactions.IsolationLevel.ReadUncommitted,
+//  TransactionTimeout = "00:10:30",
+//  InstanceContextMode = InstanceContextMode.PerSession,
+//  TransactionAutoCompleteOnSessionClose = true)]
 namespace BankingService
 {
     [ServiceBehavior(
   TransactionIsolationLevel =
-    System.Transactions.IsolationLevel.ReadUncommitted,
-  TransactionTimeout = "00:10:30",
-  InstanceContextMode = InstanceContextMode.PerSession,
-  TransactionAutoCompleteOnSessionClose = true)]
+    System.Transactions.IsolationLevel.ReadUncommitted)]
+
     public class AccountService : IAccountService
     {
         BankRepository bankRepository = new BankRepository();
