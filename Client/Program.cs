@@ -34,11 +34,13 @@ namespace Client
                         var creditSucess = await new ServiceClient<IAccountService>().ExecuteAsync(x => x.Credit(accounts[1].AccountID, 200));
                         if (debitSucess && creditSucess)
                             ts.Complete();
+                        else
+                            throw new Exception("Failed transaction");
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Transaction unsucessful. Rollback initiated");
-                        //ts.Dispose();
+                        ts.Dispose();
+                        Console.WriteLine("Transaction unsuccessful. Rollback initiated");
                     }
                 }
                 getAccounts = await new ServiceClient<IAccountService>().ExecuteAsync(x => x.GetAccounts());

@@ -14,10 +14,10 @@ namespace SharedLib
         [OperationContract]
         Task<IEnumerable<Account>> GetAccounts();
 
-        [OperationContract, TransactionFlow(TransactionFlowOption.Allowed)]
+        [OperationContract, TransactionFlow(TransactionFlowOption.Mandatory)]
         Task<bool> Debit(int accountID, int amount);
 
-        [OperationContract, TransactionFlow(TransactionFlowOption.Allowed)]
+        [OperationContract, TransactionFlow(TransactionFlowOption.Mandatory)]
         Task<bool> Credit(int accountID, int amount);
 
         [OperationContract]
