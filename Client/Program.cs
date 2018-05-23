@@ -21,13 +21,13 @@ namespace Client
                     Console.WriteLine($"AccountID:{x.AccountID}, CustomerName:{x.CustomerName}, Balance:{x.Balance}");
                 });
                 var txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted;
+                txOptions.IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted;
 
                 //TransactionScopeAsyncFlowOption.Enabled,
                 using (var ts = new TransactionScope(TransactionScopeOption.Required, txOptions, TransactionScopeAsyncFlowOption.Enabled))
                 {
                     try
-                    {
+                    {                        
                         Console.WriteLine($"Debit customer {accounts[0].CustomerName } with account# {accounts[0].AccountID} by 200");
                         var debitSucess = await new ServiceClient<IAccountService>().ExecuteAsync(x => x.Debit(accounts[0].AccountID, 200));
                         Console.WriteLine($"Credit customer {accounts[0].CustomerName } with account# {accounts[1].AccountID} by 200");

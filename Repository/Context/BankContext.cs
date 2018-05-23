@@ -25,7 +25,7 @@ namespace Repository
 #if DEBUG
             Database.Log = log => Debug.WriteLine(log);
 #endif
-            Database.SetInitializer<BankContext>(null);
+            Database.SetInitializer<BankContext>(null);            
             Configuration.LazyLoadingEnabled = false;          
         }
 

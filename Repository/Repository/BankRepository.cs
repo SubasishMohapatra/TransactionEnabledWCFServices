@@ -36,21 +36,27 @@ namespace Repository
 
         public virtual async Task<bool> CreditAccount(int accountID, int amount)
         {
-            //try
-            //{
-            using (BankContext context = new BankContext())
+            try
             {
-                var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
-                account.Balance += amount;
-                context.Entry(account).State = EntityState.Modified;
-                await context.SaveChangesAsync();
-                return true;
+                using (BankContext context = new BankContext())
+                {
+                    //using queries
+                    var sqlQuery = $"Update Account set Balance = Balance + {amount} where AccountID = {accountID}";
+                    await context.Database.ExecuteSqlCommandAsync(TransactionalBehavior.DoNotEnsureTransaction, sqlQuery);
+
+                    //using API's
+                    //var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
+                    //account.Balance += amount;
+                    //context.Entry(account).State = EntityState.Modified;
+
+                    var result = await context.SaveChangesAsync();
+                    return (result > 0);
+                }
             }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return false;
-            //}
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public virtual async Task<bool> DebitAccount(int accountID, int amount)
@@ -61,11 +67,17 @@ namespace Repository
                 //return true;
                 using (BankContext context = new BankContext())
                 {
-                    var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
-                    account.Balance -= amount;
-                    context.Entry(account).State = EntityState.Modified;
-                    await context.SaveChangesAsync();
-                    return true;
+                    //using queries
+                    var sqlQuery = $"Update Account set Balance = Balance -{amount} where AccountID = {accountID}";
+                    await context.Database.ExecuteSqlCommandAsync(TransactionalBehavior.DoNotEnsureTransaction, sqlQuery);
+
+                    //using API's
+                    //var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
+                    //account.Balance -= amount;
+                    //context.Entry(account).State = EntityState.Modified;
+
+                    var result = await context.SaveChangesAsync();
+                    return (result > 0);
                 }
             }
             catch (Exception ex)

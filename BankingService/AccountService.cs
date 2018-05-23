@@ -17,7 +17,7 @@ namespace BankingService
 {
     [ServiceBehavior(
   TransactionIsolationLevel =
-    System.Transactions.IsolationLevel.ReadUncommitted)]
+    System.Transactions.IsolationLevel.ReadCommitted)]
 
     public class AccountService : IAccountService
     {
