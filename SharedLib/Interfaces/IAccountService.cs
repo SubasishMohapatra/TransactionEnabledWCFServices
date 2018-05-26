@@ -21,6 +21,9 @@ namespace SharedLib
         Task<bool> Credit(int accountID, int amount);
 
         [OperationContract]
-        Task<int> GetBalance(int accountID);        
+        Task<int> GetBalance(int accountID);
+
+        [OperationContract]
+        Task<MiniStatement> GetMiniStatement(int accountID);
     }
 }

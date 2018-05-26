@@ -27,7 +27,7 @@ namespace Client
                 using (var ts = new TransactionScope(TransactionScopeOption.Required, txOptions, TransactionScopeAsyncFlowOption.Enabled))
                 {
                     try
-                    {                        
+                    {
                         Console.WriteLine($"Debit customer {accounts[0].CustomerName } with account# {accounts[0].AccountID} by 200");
                         var debitSucess = await new ServiceClient<IAccountService>().ExecuteAsync(x => x.Debit(accounts[0].AccountID, 200));
                         Console.WriteLine($"Credit customer {accounts[0].CustomerName } with account# {accounts[1].AccountID} by 200");
@@ -45,9 +45,10 @@ namespace Client
                 }
                 getAccounts = await new ServiceClient<IAccountService>().ExecuteAsync(x => x.GetAccounts());
                 accounts = getAccounts.ToList();
-                accounts.ForEach(x =>
+                accounts.ForEach(async accnt =>
                 {
-                    Console.WriteLine($"AccountID:{x.AccountID}, CustomerName:{x.CustomerName}, Balance:{x.Balance}");
+                    Console.WriteLine($"AccountID:{accnt.AccountID}, CustomerName:{accnt.CustomerName}, Balance:{accnt.Balance}");
+                    var statement = await new ServiceClient<IAccountService>().ExecuteAsync(x => x.GetMiniStatement(accnt.AccountID));
                 });
             }).Wait();
             Console.WriteLine("Press enter to exit");

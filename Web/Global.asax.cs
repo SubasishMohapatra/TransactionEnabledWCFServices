@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Couchbase;
+using System;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -14,7 +15,9 @@ namespace WebApp
             AreaRegistration.RegisterAllAreas();
             UnityConfig.RegisterComponents();
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);            
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            ClusterHelper.Initialize("couchbaseClients/couchbase");
+            //bucket = ClusterHelper.GetBucket("Bank");
         }
     }
 }

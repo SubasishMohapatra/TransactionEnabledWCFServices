@@ -34,33 +34,55 @@ namespace Repository
             }
         }
 
-        public virtual async Task<bool> CreditAccount(int accountID, int amount)
+        public virtual async Task<TransactionRecord> CreditAccount(int accountID, int amount)
         {
+            int lastBalance = 0;
+            TransactionRecord transactionRecord;
             try
             {
                 using (BankContext context = new BankContext())
                 {
                     //using queries
                     var sqlQuery = $"Update Account set Balance = Balance + {amount} where AccountID = {accountID}";
-                    await context.Database.ExecuteSqlCommandAsync(TransactionalBehavior.DoNotEnsureTransaction, sqlQuery);
+                    var result = await context.Database.ExecuteSqlCommandAsync(TransactionalBehavior.DoNotEnsureTransaction, sqlQuery);
+                    var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
+                    lastBalance = account.Balance;
+                    transactionRecord = new TransactionRecord()
+                    {
+                        OperationType = "Credit",
+                        TransactionAmount = amount,
+                        TransactionDate = DateTime.Now,
+                        Balance = account.Balance,
+                        IsSuccess = result > 0
+                    };
 
                     //using API's
                     //var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
                     //account.Balance += amount;
                     //context.Entry(account).State = EntityState.Modified;
+                    //var result = await context.SaveChangesAsync();
 
-                    var result = await context.SaveChangesAsync();
-                    return (result > 0);
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                transactionRecord = new TransactionRecord()
+                {
+                    OperationType = "Credit",
+                    TransactionAmount = amount,
+                    TransactionDate = DateTime.Now,
+                    Balance = lastBalance,
+                    IsSuccess = false
+                };
             }
+            return transactionRecord;
+
         }
 
-        public virtual async Task<bool> DebitAccount(int accountID, int amount)
+        public virtual async Task<TransactionRecord> DebitAccount(int accountID, int amount)
         {
+            int lastBalance = 0;
+            TransactionRecord transactionRecord;
             try
             {
                 //Test(accountID, amount);
@@ -68,22 +90,39 @@ namespace Repository
                 using (BankContext context = new BankContext())
                 {
                     //using queries
-                    var sqlQuery = $"Update Account set Balance = Balance -{amount} where AccountID = {accountID}";
-                    await context.Database.ExecuteSqlCommandAsync(TransactionalBehavior.DoNotEnsureTransaction, sqlQuery);
+                    var updateBalanceSqlQuery = $"Update Account set Balance = Balance -{amount} where AccountID = {accountID}";
+                    var result = await context.Database.ExecuteSqlCommandAsync(TransactionalBehavior.DoNotEnsureTransaction, updateBalanceSqlQuery);
+                    var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
+                    lastBalance = account.Balance;
+                    transactionRecord = new TransactionRecord()
+                    {
+                        OperationType = "Debit",
+                        TransactionAmount = amount,
+                        TransactionDate = DateTime.Now,
+                        Balance = account.Balance,
+                        IsSuccess = result > 0
+                    };
 
                     //using API's
                     //var account = await context.Account.FirstOrDefaultAsync(x => x.AccountID == accountID);
                     //account.Balance -= amount;
                     //context.Entry(account).State = EntityState.Modified;
-
-                    var result = await context.SaveChangesAsync();
-                    return (result > 0);
+                    //var result = await context.SaveChangesAsync();
+                    return transactionRecord;
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                transactionRecord = new TransactionRecord()
+                {
+                    OperationType = "Debit",
+                    TransactionAmount = amount,
+                    TransactionDate = DateTime.Now,
+                    Balance = lastBalance,
+                    IsSuccess = false
+                };
             }
+            return transactionRecord;
         }
 
         /// <summary>
